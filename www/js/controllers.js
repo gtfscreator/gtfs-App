@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('gtfsApp.controllers', [])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
   
@@ -39,18 +39,105 @@ angular.module('starter.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
+
+
 })
 
-.controller('LineeCtrl', function($scope, $stateParams) {
-// todo
+.controller('LineeCtrl', function($scope, $stateParams, Restangular, Type) {
+
+
+  $scope.linee = [];
+  $scope.pagina  = 0 ;
+  $scope.updatig = false;
+  $scope.filter = {tipe : '3'};
+
+  console.log(Type.humanize(3));
+
+  var updateLineeFromServer = function(page){
+      $scope.updatig = true;
+      //var params = angular.copy($scope.filters); se ci sono parametri
+      var params = [];
+      params.page = page;
+      if(page == 1){
+          $scope.linee = [];
+      }
+      Restangular.all('routes').getList(params)
+      .then(function(data){
+          $scope.linee = $scope.linee.concat(data);
+          $scope.metadata = data.metadata;
+          $scope.updatig = false;          
+      });
+  };
+
+  $scope.updateLinee = function(){
+      if($scope.updating){ $scope.$broadcast('scroll.infiniteScrollComplete'); return;}
+      if($scope.metadata && $scope.metadata.next){
+        $scope.pagina = $scope.pagina + 1;
+        updateLineeFromServer($scope.pagina);
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+  };
+
+
+  $scope.filtraLinee = function(){
+    return function(linea){
+      console.log($scope.filter.tipe);
+      if ($scope.filter.tipe == linea.rtype){ return true}
+
+        return _.contains(linea.rtype, $scope.filter.tipe);
+      return true;
+    }
+  }
+
+
+  updateLineeFromServer(1);
+
 })
 
 .controller('LineaCtrl', function($scope, $stateParams) {
 // todo
 })
 
-.controller('FermateCtrl', function($scope, $stateParams) {
-// todo
+
+
+.controller('FermateCtrl', function($scope, $stateParams, Restangular) {
+
+  $scope.fermate = [];
+
+  $scope.pagina  = 0 ;
+
+  console.log($scope.fermate);
+
+  $scope.updatig = false;
+
+  var updateFermateFromServer = function(page){
+      $scope.updatig = true;
+      //var params = angular.copy($scope.filters); se ci sono parametri
+      var params = [];
+      params.page = page;
+      if(page == 1){
+          $scope.fermate = [];
+      }
+      Restangular.all('stops').getList(params)
+      .then(function(data){
+          $scope.fermate = $scope.fermate.concat(data);
+          $scope.metadata = data.metadata;
+          $scope.updatig = false;          
+      });
+  };
+
+  $scope.updateFermate = function(){
+      if($scope.updating){ $scope.$broadcast('scroll.infiniteScrollComplete'); return;}
+      if($scope.metadata && $scope.metadata.next){
+        $scope.pagina = $scope.pagina + 1;
+        updateFermateFromServer($scope.pagina);
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+  };
+
+  updateFermateFromServer(1);
+
+
 })
 
 .controller('MapCtrl', function($scope, $stateParams) {

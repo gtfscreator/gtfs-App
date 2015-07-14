@@ -1,5 +1,18 @@
 <ion-view view-title="Fermate">
   <ion-content>
     <h1>Fermate</h1>
+
+    <ul class="list">
+        <li class="item" collection-repeat="fermata in fermate" style="color:#000;">
+            {{fermata.name}}
+        </li>
+    </ul>
+
+
+  <ion-infinite-scroll
+    on-infinite="updateFermate()"
+    distance="5%">
+  </ion-infinite-scroll>
+
   </ion-content>
 </ion-view>

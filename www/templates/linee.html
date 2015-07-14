@@ -1,5 +1,19 @@
 <ion-view view-title="Linee">
   <ion-content>
     <h1>Linee</h1>
+
+
+    <ul class="list">
+        <li class="item" collection-repeat="linea in linee|filter:filtraLinee()">
+            {{linea.long_name}} {{linea.rtype}} 
+        </li>
+    </ul>
+
+
+  <ion-infinite-scroll
+    on-infinite="updateLinee()"
+    distance="5%">
+  </ion-infinite-scroll>
+
   </ion-content>
 </ion-view>

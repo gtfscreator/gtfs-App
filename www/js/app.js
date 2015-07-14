@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'restangular', 'ngCordova'])
+angular.module('gtfsApp', ['ionic', 'gtfsApp.controllers', 'gtfsApp.services', 'restangular', 'ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -22,11 +22,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'restangular', 'ngCor
 
 .config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
 
-  // server locale davide -------------------------------
-  //var baseServerUrl = 'http://localhost:8000/v1/api/';
-  // -------------------------------------------------------
+  // id dell'agenzia
+  var agenziaId = 1;
 
-  var baseServerUrl = 'http://gtfs.inmagik.com/api/';
+  // url base dell'agenzia
+  var baseServerUrl = 'http://gtfs.inmagik.com/api/feeds/'+agenziaId+'/' ;
+  console.log(baseServerUrl);
   RestangularProvider.setBaseUrl(baseServerUrl);
 
   //Caching should be used, but the cache must be cleared when needed, for example when creating a new item!!!
@@ -94,9 +95,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'restangular', 'ngCor
 
   .state('app.fermate', {
     url: "/fermate",
+    cache : true,
     views: {
       'menuContent': {
-        templateUrl: "templates/fermate.html"
+        templateUrl: "templates/fermate.html",
+        controller : "FermateCtrl"
       }
     }
   })

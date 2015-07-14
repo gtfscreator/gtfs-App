@@ -1,7 +1,7 @@
 angular.module('gtfsApp.services', [])
 
 
-.factory('Type', function($http, $q) {
+.factory('Type', function() {
 
   var dizType = {
     1 : 'ciao',

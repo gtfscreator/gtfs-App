@@ -113,6 +113,16 @@ angular.module('gtfsApp', ['ionic', 'gtfsApp.controllers', 'gtfsApp.services', '
       }
     })
 
+    .state('app.setting', {
+      url: "/setting",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/setting.html",
+          controller: 'SettingCtrl'
+        }
+      }
+    })
+
     .state('app.info', {
       url: "/info",
       views: {

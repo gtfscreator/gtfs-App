@@ -49,9 +49,28 @@ angular.module('gtfsApp.controllers', [])
   $scope.linee = [];
   $scope.pagina  = 0 ;
   $scope.updatig = false;
-  $scope.filter = {tipe : '3'};
+  $scope.filters = {
+                  data: true, 
+                  tipo :
+                  [  { id:0, type: 'tram',  state : true} ,
+                     { id:1, type: 'metro',  state : false} ,
+                     { id:2, type: 'treno',  state : true} ,
+                     { id:3, type: 'bus',  state : true} ,             
+                     { id:4, type: 'barca',  state : true} ,
+                     { id:5, type: 'funivia',  state : false} ,
+                     { id:6, type: 'gondola',  state : true} ,
+                     { id:7, type: 'funicolare',  state : true} 
+                  ]
+                  };
 
-  console.log(Type.humanize(3));
+//console.log(_.where($scope.filter, {state:false}));
+
+
+console.log(_.where($scope.filters.tipo, {state:false}));
+
+
+//console.log($scope.filter[1])
+//  console.log(Type.humanize(3));
 
   var updateLineeFromServer = function(page){
       $scope.updatig = true;
@@ -81,13 +100,12 @@ angular.module('gtfsApp.controllers', [])
 
   $scope.filtraLinee = function(){
     return function(linea){
-      console.log($scope.filter.tipe);
-      if ($scope.filter.tipe == linea.rtype){ return true}
-
-        return _.contains(linea.rtype, $scope.filter.tipe);
+//console.log(_.where($scope.filters.tipo, {state:false, id:linea.rtype}).length);
+      if (_.where($scope.filters.tipo, {state:false, id:linea.rtype}).length>0) {
+          return false;}      
       return true;
     }
-  }
+  };
 
 
   updateLineeFromServer(1);

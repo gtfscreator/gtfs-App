@@ -26,7 +26,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'restangular', 'ngCor
   //var baseServerUrl = 'http://localhost:8000/v1/api/';
   // -------------------------------------------------------
 
-  var baseServerUrl = 'http://audacepalestre.com/v1/api/';
+  var baseServerUrl = 'http://gtfs.inmagik.com/api/';
   RestangularProvider.setBaseUrl(baseServerUrl);
 
   //Caching should be used, but the cache must be cleared when needed, for example when creating a new item!!!
@@ -121,7 +121,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'restangular', 'ngCor
     });
 
 
-    
+
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/linee');
 });

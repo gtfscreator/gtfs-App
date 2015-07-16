@@ -1,6 +1,6 @@
 angular.module('gtfsApp.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $rootScope, Restangular) {
   
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -40,33 +40,46 @@ angular.module('gtfsApp.controllers', [])
     }, 1000);
   };
 
-
-})
-
-.controller('LineeCtrl', function($scope, $stateParams, Restangular, Type) {
-
-
-  $scope.linee = [];
-  $scope.pagina  = 0 ;
-  $scope.updatig = false;
-  $scope.filters = {
+  $rootScope.filters = {
                   data: true, 
                   tipo :
                   [  { id:0, type: 'tram',  state : true} ,
-                     { id:1, type: 'metro',  state : false} ,
+                     { id:1, type: 'metro',  state : true} ,
                      { id:2, type: 'treno',  state : true} ,
                      { id:3, type: 'bus',  state : true} ,             
                      { id:4, type: 'barca',  state : true} ,
-                     { id:5, type: 'funivia',  state : false} ,
+                     { id:5, type: 'funivia',  state : true} ,
                      { id:6, type: 'gondola',  state : true} ,
                      { id:7, type: 'funicolare',  state : true} 
                   ]
                   };
 
-//console.log(_.where($scope.filter, {state:false}));
+// init e save in locale 
+var params = [];
+params.page = 1;
+  Restangular.all('routes/_rtype/').get(params)
+      .then(function(data){
+        console.log(data);
+
+        console.log(_.pick($rootScope.filters.tipo, _.keys(data)));
+        $rootScope.filters.tipo = _.pick($rootScope.filters.tipo, _.keys(data));
+//          $scope.linee = $scope.linee.concat(data);
+//          $scope.metadata = data.metadata;
+//          $scope.updatig = false;          
+      });  
 
 
-console.log(_.where($scope.filters.tipo, {state:false}));
+
+
+
+})
+
+.controller('LineeCtrl', function($scope, $stateParams, Restangular, Type, $rootScope) {
+
+
+  $scope.linee = [];
+  $scope.pagina  = 0 ;
+  $scope.updatig = false;
 
 
 //console.log($scope.filter[1])
@@ -74,7 +87,6 @@ console.log(_.where($scope.filters.tipo, {state:false}));
 
   var updateLineeFromServer = function(page){
       $scope.updatig = true;
-      //var params = angular.copy($scope.filters); se ci sono parametri
       var params = [];
       params.page = page;
       if(page == 1){
@@ -100,8 +112,8 @@ console.log(_.where($scope.filters.tipo, {state:false}));
 
   $scope.filtraLinee = function(){
     return function(linea){
-//console.log(_.where($scope.filters.tipo, {state:false, id:linea.rtype}).length);
-      if (_.where($scope.filters.tipo, {state:false, id:linea.rtype}).length>0) {
+      // se esiste un lelemnto del vettore con stato falso e id della n-esima tipologia
+      if (_.where($rootScope.filters.tipo, {state:false, id:linea.rtype}).length>0) {
           return false;}      
       return true;
     }
@@ -174,6 +186,11 @@ console.log(_.where($scope.filters.tipo, {state:false}));
 })
 
 .controller('InfoCtrl', function($scope, $stateParams) {
+})
+
+.controller('SettingCtrl', function($scope, $stateParams, $rootScope) {
+
+
 })
 
 
